@@ -1,4 +1,4 @@
-title Kye 0.90
+title Kye 2.103
 (Note always before sharing set SOUND_VOL to 0.05 in the HTML)
 ( Requires auroriax's Puzzlescript+ fork : https://auroriax.github.io/PuzzleScript/editor.html)
 
@@ -2550,12 +2550,6 @@ horizontal [RealTime MagnetQuickTic ][ StickyH | no Object | Kye ] -> [RealTime 
 vertical   [RealTime MagnetQuickTic ][ StickyV | no Object | Kye ] -> [RealTime MagnetQuickTic ][ > StickyV | | Kye ]
 
 
-( give priority to arrows that can already move )
-down  [ down  ArrowD | no Object ] -> [ | ArrowD ]
-up    [ up    ArrowU | no Object ] -> [ | ArrowU ]
-right [ right ArrowR | no Object ] -> [ | ArrowR ]
-left  [ left  ArrowL | no Object ] -> [ | ArrowL ]
-
 ( subtract countdowns )
 [ RealTime BouncerTic ][ AutoCountdown01 ] -> [ RealTime BouncerTic ][ AutoCountdown00 ]
 [ RealTime BouncerTic ][ AutoCountdown02 ] -> [ RealTime BouncerTic ][ AutoCountdown01 ]
@@ -2665,7 +2659,10 @@ down  [ > Kye | DoorUD  BlockedDoor ] -> [ | DoorUD Kye ]
 
 
 ( Blackhole swallow)
-[ > Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
+down  [ down  Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
+right [ right Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
+left  [ left  Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
+up    [ up    Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
 
 [ RealTime BlackHoleConsumptionTicHalf ][            BlackHoleBusy5 ] -> [ RealTime BlackHoleConsumptionTic ][ BlackHole ]
 [ RealTime BlackHoleConsumptionTic ][            BlackHoleBusy4 ] -> [ RealTime BlackHoleConsumptionTic ][ BlackHoleBusy5 ]
@@ -2684,26 +2681,6 @@ down  [ > BouncerD | Object ]          -> [ BouncerU | Object ]
 
 (slide logic)
 
-( - up )
-[ Slide ] -> []
-up [ up RoundArrowU | Corner1 ] -> [ SlideL1 up RoundArrowU | Corner1 ]
-up [ up RoundArrowU | Corner3 ] -> [ SlideR1 up RoundArrowU | Corner3 ]
-
-right [ SlideR1 | no Object ] -> [ SlideR1 | SlideR2 ]
-left  [ SlideL1 | no Object ] -> [ SlideL1 | SlideL2 ]
-
-up [ SlideR2 | Object ] -> [ | Object ]
-up [ SlideL2 | Object ] -> [ | Object ]
-
-right [ SlideR1 | no SlideR2 ] -> [ | ]
-left  [ SlideL1 | no SlideL2 ] -> [ | ]
-
-
-[ SlideL1 SlideR1  ] -> [ random SlideH ] (pick a random one)
-
-right [ up RoundArrowU SlideR1 | SlideR2 ] -> [ | up RoundArrowU SlideR2 ]
-left  [ up RoundArrowU SlideL1 | SlideL2 ] -> [ | up RoundArrowU SlideL2 ]
-
 ( - down )
 [ Slide ] -> []
 down [ down RoundArrowD | Corner7 ] -> [ SlideL1 down RoundArrowD | Corner7 ]
@@ -2721,8 +2698,29 @@ left  [ SlideL1 | no SlideL2 ] -> [ | ]
 
 [ SlideL1 SlideR1  ] -> [ random SlideH ] (pick a random one)
 
-right [ down RoundArrowD SlideR1 | SlideR2 ] -> [ | down RoundArrowD SlideR2 ]
-left  [ down RoundArrowD SlideL1 | SlideL2 ] -> [ | down RoundArrowD SlideL2 ]
+right [ down RoundArrowD SlideR1 | SlideR2 no Object ] -> [ | down RoundArrowD SlideR2 ]
+left  [ down RoundArrowD SlideL1 | SlideL2 no Object ] -> [ | down RoundArrowD SlideL2 ]
+
+( - right )
+[ Slide ] -> []
+right [ right RoundArrowR | Corner7 ] -> [ SlideU1 right RoundArrowR | Corner7 ]
+right [ right RoundArrowR | Corner1 ] -> [ SlideD1 right RoundArrowR | Corner1 ]
+
+up    [ SlideU1 | no Object ] -> [ SlideU1 | SlideU2 ]
+down  [ SlideD1 | no Object ] -> [ SlideD1 | SlideD2 ]
+
+right [ SlideU2 | Object ] -> [ | Object ]
+right [ SlideD2 | Object ] -> [ | Object ]
+
+up   [ SlideU1 | no SlideU2 ] -> [ | ]
+down [ SlideD1 | no SlideD2 ] -> [ | ]
+
+
+[ SlideU1 SlideD1  ] -> [ random SlideV ] (pick a random one)
+
+down  [ right RoundArrowR SlideD1 | SlideD2 no Object ] -> [ | right RoundArrowR SlideD2 ]
+up    [ right RoundArrowR SlideU1 | SlideU2 no Object ] -> [ | right RoundArrowR SlideU2 ]
+
 
 
 ( - lef )
@@ -2742,28 +2740,31 @@ down [ SlideD1 | no SlideD2 ] -> [ | ]
 
 [ SlideU1 SlideD1  ] -> [ random SlideV ] (pick a random one)
 
-up    [ left RoundArrowL SlideU1 | SlideU2 ] -> [ | left RoundArrowL SlideU2 ]
-down  [ left RoundArrowL SlideD1 | SlideD2 ] -> [ | left RoundArrowL SlideD2 ]
+down  [ left RoundArrowL SlideD1 | SlideD2  no Object ] -> [ | left RoundArrowL SlideD2 ]
+up    [ left RoundArrowL SlideU1 | SlideU2  no Object ] -> [ | left RoundArrowL SlideU2 ]
 
-( - right )
+
+( - up )
 [ Slide ] -> []
-right [ right RoundArrowR | Corner7 ] -> [ SlideU1 right RoundArrowR | Corner7 ]
-right [ right RoundArrowR | Corner1 ] -> [ SlideD1 right RoundArrowR | Corner1 ]
+up [ up RoundArrowU | Corner1 ] -> [ SlideL1 up RoundArrowU | Corner1 ]
+up [ up RoundArrowU | Corner3 ] -> [ SlideR1 up RoundArrowU | Corner3 ]
 
-up    [ SlideU1 | no Object ] -> [ SlideU1 | SlideU2 ]
-down  [ SlideD1 | no Object ] -> [ SlideD1 | SlideD2 ]
+right [ SlideR1 | no Object ] -> [ SlideR1 | SlideR2 ]
+left  [ SlideL1 | no Object ] -> [ SlideL1 | SlideL2 ]
 
-right [ SlideU2 | Object ] -> [ | Object ]
-right [ SlideD2 | Object ] -> [ | Object ]
+up [ SlideR2 | Object ] -> [ | Object ]
+up [ SlideL2 | Object ] -> [ | Object ]
 
-up   [ SlideU1 | no SlideU2 ] -> [ | ]
-down [ SlideD1 | no SlideD2 ] -> [ | ]
+right [ SlideR1 | no SlideR2 ] -> [ | ]
+left  [ SlideL1 | no SlideL2 ] -> [ | ]
 
 
-[ SlideU1 SlideD1  ] -> [ random SlideV ] (pick a random one)
+[ SlideL1 SlideR1  ] -> [ random SlideH ] (pick a random one)
 
-up    [ right RoundArrowR SlideU1 | SlideU2 ] -> [ | right RoundArrowR SlideU2 ]
-down  [ right RoundArrowR SlideD1 | SlideD2 ] -> [ | right RoundArrowR SlideD2 ]
+right [ up RoundArrowU SlideR1 | SlideR2 no Object ] -> [ | up RoundArrowU SlideR2 ]
+left  [ up RoundArrowU SlideL1 | SlideL2 no Object ] -> [ | up RoundArrowU SlideL2 ]
+
+
 
 
 ( death animation )
@@ -2814,11 +2815,134 @@ endloop
 [ RealTime TicM5 TicM2 TicM3 no FirstTic ][ Timer9 ] -> [ RealTime TicM5 TicM2 TicM3 ][ Timer8 ]
 
 
-
-
-
 ( Block any movement towards door that's not the vlaid one already processeced above)
 [ > Object | Door ] -> [ Object | Door ]
+
+
+( Very important part of the rules, this one does the movement instead of puzzle script,
+that way the order in which directions are evaluated is closer to original Kye's . There's
+a lot of levels that implicitly require this sort of priority to be enforced. e.g SLIDERS and COUNTERS)
+
+( the priority SEEMS to be as follows: arrows before other objects, down has priority over right, right has priority over left and up is the worst )
+
+
+startloop
+    down [ down  Arrow | no Object ] -> [ | Arrow ]
+    right[ right Arrow | no Object ] -> [ | Arrow ]
+endloop
+
+
+startloop
+    down [ down  Arrow | no Object ] -> [ | Arrow ]
+    right[ right Arrow | no Object ] -> [ | Arrow ]
+    left [ left  Arrow | no Object ] -> [ | Arrow ]
+endloop
+
+startloop
+    down [ down  Arrow | no Object ] -> [ | Arrow ]
+    right[ right Arrow | no Object ] -> [ | Arrow ]
+    left [ left  Arrow | no Object ] -> [ | Arrow ]
+    up   [ up    Arrow | no Object ] -> [ | Arrow ]
+
+endloop
+
+
+startloop
+    down [ down  Arrow | no Object ] -> [ | Arrow ]
+    right[ right Arrow | no Object ] -> [ | Arrow ]
+    left [ left  Arrow | no Object ] -> [ | Arrow ]
+    up   [ up    Arrow | no Object ] -> [ | Arrow ]
+
+    down [ down  Object | no Object ] -> [ | Object ]
+endloop
+
+startloop
+    down [ down  Arrow | no Object ] -> [ | Arrow ]
+    right[ right Arrow | no Object ] -> [ | Arrow ]
+    left [ left  Arrow | no Object ] -> [ | Arrow ]
+    up   [ up    Arrow | no Object ] -> [ | Arrow ]
+
+    down [ down  Object | no Object ] -> [ | Object ]
+    right[ right Object | no Object ] -> [ | Object ]
+endloop
+
+
+startloop
+    down [ down  Arrow | no Object ] -> [ | Arrow ]
+    right[ right Arrow | no Object ] -> [ | Arrow ]
+    left [ left  Arrow | no Object ] -> [ | Arrow ]
+    up   [ up    Arrow | no Object ] -> [ | Arrow ]
+
+    down [ down  Object | no Object ] -> [ | Object ]
+    right[ right Object | no Object ] -> [ | Object ]
+    left [ left  Object | no Object ] -> [ | Object ]
+endloop
+
+
+
+startloop
+    down [ down  Arrow | no Object ] -> [ | Arrow ]
+    right[ right Arrow | no Object ] -> [ | Arrow ]
+    left [ left  Arrow | no Object ] -> [ | Arrow ]
+    up   [ up    Arrow | no Object ] -> [ | Arrow ]
+
+    down [ down  Object | no Object ] -> [ | Object ]
+    right[ right Object | no Object ] -> [ | Object ]
+    left [ left  Object | no Object ] -> [ | Object ]
+    up   [ up    Object | no Object ] -> [ | Object ]
+endloop
+
+
+
+(some good with programming please help me, my family is dying )
+
+
+
+(down [ down  Arrow | no Object ] -> [ | Arrow ]
+startloop
+
+   down [ down  Arrow | no Object ] -> [ | Arrow ]
+   right[ right Arrow | no Object ] -> [ | Arrow ]
+endloop
+
+startloop
+   down [ down  Arrow | no Object ] -> [ | Arrow ]
+   right[ right Arrow | no Object ] -> [ | Arrow ]
+   left [ left  Arrow | no Object ] -> [ | Arrow ]
+endloop
+
+startloop
+   down [ down  Arrow | no Object ] -> [ | Arrow ]
+   right[ right Arrow | no Object ] -> [ | Arrow ]
+   left [ left  Arrow | no Object ] -> [ | Arrow ]
+   up   [ up    Arrow | no Object ] -> [ | Arrow ]
+endloop
+
+
+
+
+down [ down  Object | no Object ] -> [ | Object ]
+startloop
+
+   down [ down  Object | no Object ] -> [ | Object ]
+   right[ right Object | no Object ] -> [ | Object ]
+endloop
+
+startloop
+   down [ down  Object | no Object ] -> [ | Object ]
+   right[ right Object | no Object ] -> [ | Object ]
+   left [ left  Object | no Object ] -> [ | Object ]
+endloop
+
+(I am going to programmer's hell)
+startloop
+   down [ down  Object | no Object ] -> [ | Object ]
+   right[ right Object | no Object ] -> [ | Object ]
+   left [ left  Object | no Object ] -> [ | Object ]
+   up   [ up    Object | no Object ] -> [ | Object ]
+endloop)
+
+
 
 ( Reset the countdowns, depends on the row number. This is the worst)
 late [ AutoCountdown no AutoSomething ] -> [] (get rid of unnecessary countdowns)
@@ -2922,6 +3046,7 @@ WINCONDITIONS
 =======
 LEVELS
 =======
+
 
 
 section FIRST
@@ -3201,6 +3326,11 @@ Still I firmly believe that the monsters are a foundational element for Kye's be
 555555555555555555555555555555
 
 
+
+
+
+
+
 section TIME
 message TIME - It's not a matter of time
 (made be vexorian vexkye.kye )
@@ -3233,6 +3363,37 @@ Auto blocks have way too special rules regarding when to shoot. And really the o
 55c755555555555555555555559a55
 555555555555555555555555555555
 
+section FOUR
+
+message FOUR - There are four directions, in this order: down , right, left, up.
+
+( by vexorian, vexkye.kye actually based off a puzzle I made for Xye, but the direction priority is a bit arbitrary, in Xye, the top arrow is actually red and the others are yellow, so it becoems a level about how red is faster. In Kye, it becomes a tutorial about how the author decided that down comes before right, left and up ... )
+
+(In a way, it makes sense? If it was gravity, down would be easier than the other directios? )
+
+555555555555555555555555555555
+5..........5555555..........55
+5.........73vvvvv19.........55
+5.........5>*****<5.........55
+5.........19>***<73.........55
+5..........155*553..........55
+5............5.5............55
+5....459.............756....55
+5...8>*19...........73*<8...55
+5...5>e*155...v...553*e<5...55
+5...5>*e**...>K<...**e*<5...55
+5...5>e*755...^...559*e<5...55
+5...2>*73...........19*<2...55
+5....453.............156....55
+5............5.5............55
+5............5.5............55
+5............5*5............55
+5...........73e19...........55
+5...........5*e*5...........55
+555555555555555555555555555555
+
+
+
 
 section DONTSLIDE
 message DONTSLIDE - dont let victory slide.
@@ -3261,33 +3422,7 @@ message DONTSLIDE - dont let victory slide.
 555555555555555555555555555555
 
 
-section SOKYEBAN
-message A bit of a Proof of concept.
 
-(Another thing you don't sere often in Kye level sets is actually-good block puzzles. Perhaps because the other elements have so much stuff that's way flashier, or maybe it's the lack of an undo button (fixed now). But there are many ways to include good sokoban puzzles in game. And this one is interesting, because it shows a very easy way to port any sokoban level in which all of the block targets in the solution lie in a line.)
-
-
-
-555555555555555555555555555555
-555555555555555555555555555555
-555555555555555555555555555555
-555555555555*.1555555555c55555
-55555K.....5.*...........15555
-555559.b5b.5*.7555555556.c5555
-555555b..b.5553..........c5555
-555555.b.b4555>b>b>b>b>b.c5555
-555553.5.b.5559s8s8s8s8s.75555
-5555..b..b.1553.2.2.2.2..55555
-5555...b..b..............55555
-5555555555559.8.8.8.8.8..55555
-5555555555553s2s2s2s2s2s.15555
-555555555555>b>b>b>b>b>b.a5555
-5555555555559............a5555
-555555555555555555555556.a5555
-555555555555.*...........75555
-555555555555*.7555555555a55555
-555555555555555555555555555555
-555555555555555555555555555555
 
 
 section SLIDER
@@ -3317,6 +3452,63 @@ message SLIDER - Machines!
 5..............5^^^5.5e<5u...5
 55ee555555555555^^^5.5..5u...5
 5*eeeeeeeeeeeeee^^^5.e..5u..*5
+555555555555555555555555555555
+
+
+section THREESTEPSFLOW
+
+message THREESTEPSFLOW - Three steps but don't disturb it.
+
+( I always liked the shareware level COUNTERS, but it has many issues. Lots of people solve the level thinking it's a race against time. When in fact, it's about not disturbing the arrows. This level actually uses the COUNTERS layout but inside it has so many tasks that it makes it impossible to do it by just being faster than the arrows. )
+
+555555555555555555555555555555
+555555555555555555c55555555555
+5555c..............15555555555
+5..55.55..55..5e5a........c..5
+5K..5..55555555e5555555ll....5
+555.5..55555555eeeeeee5..5.555
+55.e5.555555555555555e5..5.TS5
+555u5...........a5555e5D.5.555
+5.c....555..555.ee5eee5555.555
+5......55555555d5e5e555555.TS5
+55555..555..555.5e5eee5d55.555
+5c..............5e555dee55.555
+55.755555555555a5e555e5e55.TS5
+5..c55ellllllllllleeee5e55.555
+55.555e5555555555555555eee...5
+5..555e5s555s555s555s55555...5
+55.1c5e5T555T555T555T5L....v.5
+5......................rr.c5.5
+55c5555555555555555555555555*5
+555555555555555555555555555555
+
+
+section SOKYEBAN
+message SOKYEBAN - A bit of a Proof of concept.
+
+(Another thing you don't sere often in Kye level sets is actually-good block puzzles. Perhaps because the other elements have so much stuff that's way flashier, or maybe it's the lack of an undo button (fixed now). But there are many ways to include good sokoban puzzles in game. And this one is interesting, because it shows a very easy way to port any sokoban level in which all of the block targets in the solution lie in a line.)
+
+
+
+555555555555555555555555555555
+555555555555555555555555555555
+555555555555555555555555555555
+555555555555*.1555555555c55555
+55555K.....5.*...........15555
+555559.b5b.5*.7555555556.c5555
+555555b..b.5553..........c5555
+555555.b.b4555>b>b>b>b>b.c5555
+555553.5.b.5559s8s8s8s8s.75555
+5555..b..b.1553.2.2.2.2..55555
+5555...b..b..............55555
+5555555555559.8.8.8.8.8..55555
+5555555555553s2s2s2s2s2s.15555
+555555555555>b>b>b>b>b>b.a5555
+5555555555559............a5555
+555555555555555555555556.a5555
+555555555555.*...........75555
+555555555555*.7555555555a55555
+555555555555555555555555555555
 555555555555555555555555555555
 
 
@@ -3606,52 +3798,6 @@ message BANK VAULT - Defuse it
 555555555555555555555555555555
 
 
-section HELPER
-
-555555555555555555555555555555
-5*>155..5****e.a2E...5....2.15
-5>>>13..5****e.......2.......5
-5>>>>d..555555.......*.eee8.75
-5>>>>e..5....5.......ellll5.55
-5>>>e.8.2....5a...........5.55
-5555553......55555555555555.55
-5.......8..753............2.15
-5..455555553.................5
-5.............76......45555555
-5.............5.......eeeee*S5
-5.........75553.......8<<<<<e5
-5.........5*b.........59<<<<e5
-5.........155555555555559<<<e5
-5...............5sssssss155555
-5...............2.......D...*5
-5.......................8bbbb5
-556v7...........8sssssss5.T..5
-5K.e5...........555555555....5
-555555555555555555555555555555
-
-
-section RELEASE
-
-555555555555555555555555555555
-5dlllllllllllllllllllllll55555
-5d7555555555555555555556u15555
-5d5...5rrv..............ulll55
-5d5...5>>rrrra755555555559u755
-5d5..U555556*43......2<<<5u555
-5d5...5*b.............e8.5u555
-5d5...19.49..........755.2u155
-5d19...5.s>e..K.....7555.su.55
-5>>2...1556............1556.15
-5>>>b.....................b.*5
-5>>8.75555555555555555555556.5
-555553.........celllll......e5
-5>v<..BS*................156u5
-5rvu......................2*u5
-5rv.......................b*u5
-5>d.......................8*u5
-5ed......................456u5
-5errrrrrrrrrrrrrrrrrrrrrrrrru5
-555555555555555555555555555555
 
 section SLIDERS
 message SLIDERS - Remember they're square
@@ -3708,6 +3854,7 @@ message ROUNDERS - They are round
 555555555555555555555555555555
 
 section ROCKYV
+message ROCKYV - This was the last level in shareware kye.
 
 ( From Colin Garbutt, default.kye )
 
@@ -3774,9 +3921,14 @@ message BLOCKADE - Build one?
 (One of my favorite ides and I made it quite some time ago. One of those rare times I felt like I was actually coming up with something new in Kye )
 
 
+( welp, turns out there was a cheese in the original version of this level, and I saw it in youtube. https://www.youtube.com/watch?v=-B7ha6j0W6c dying is NOT part of the solution
+
+)
+
+
 555555555555555555555555555555
-5.K}T5555555555555555555555555
-5.ell5555555555555555555555555
+55555.K..}.5555555555555555555
+5.re..5..}T5555555555555555555
 56h455555555555555555555555555
 5...13......................55
 5...........................55
@@ -3794,6 +3946,7 @@ message BLOCKADE - Build one?
 55e2d153..4559..e.e...*<<<<<<5
 55..e.....e**59.......*<<<<<<5
 555555555555555555555555555555
+
 
 
 
@@ -3822,6 +3975,13 @@ message HERTZ
 
 
 message More to come (hopefully)
+
+
+
+
+
+
+
 (
 
 
@@ -3868,6 +4028,54 @@ message More to come (hopefully)
 
 
 
+section HELPER
+
+555555555555555555555555555555
+5*>155..5****e.a2E...5....2.15
+5>>>13..5****e.......2.......5
+5>>>>d..555555.......*.eee8.75
+5>>>>e..5....5.......ellll5.55
+5>>>e.8.2....5a...........5.55
+5555553......55555555555555.55
+5.......8..753............2.15
+5..455555553.................5
+5.............76......45555555
+5.............5.......eeeee*S5
+5.........75553.......8<<<<<e5
+5.........5*b.........59<<<<e5
+5.........155555555555559<<<e5
+5...............5sssssss155555
+5...............2.......D...*5
+5.......................8bbbb5
+556v7...........8sssssss5.T..5
+5K.e5...........555555555....5
+555555555555555555555555555555
+
+
+section RELEASE
+
+555555555555555555555555555555
+5dlllllllllllllllllllllll55555
+5d7555555555555555555556u15555
+5d5...5rrv..............ulll55
+5d5...5>>rrrra755555555559u755
+5d5..U555556*43......2<<<5u555
+5d5...5*b.............e8.5u555
+5d5...19.49..........755.2u155
+5d19...5.s>e..K.....7555.su.55
+5>>2...1556............1556.15
+5>>>b.....................b.*5
+5>>8.75555555555555555555556.5
+555553.........celllll......e5
+5>v<..BS*................156u5
+5rvu......................2*u5
+5rv.......................b*u5
+5>d.......................8*u5
+5ed......................456u5
+5errrrrrrrrrrrrrrrrrrrrrrrrru5
+555555555555555555555555555555
+
+
 
 section DIAMOND
 
@@ -3892,28 +4100,7 @@ section DIAMOND
 5........5*5..5..............5
 555555555555555555555555555555
 
-section COUNTERS
 
-555555555555555555555555555555
-5K...5553..1553.15c5.........5
-5...c..............155e5555e55
-55e55.7a55e5555e5a........c..5
-5...5.5...........a55c5ll....5
-5...5.a...............5U.5..75
-5...5.15e55555e55.759.5..e..55
-5...5...........a.5.5.5..5..15
-5...1c55e555e55.5.e.5.5555...5
-5.............5d5.5.e.1c55...5
-5555e55e555e555.5.5.a....5...5
-5c..............5.e.159..5..75
-55.75e5555e5555a5.5...e..e..55
-55.c..............5...5..5..15
-55.5.45e555555e55a55e53..5...5
-55.5......>.............c5...5
-53.1c55e55555e55555e55..Ru.v.5
-5............r............c5.5
-55c555559...75555559...75555*5
-555555555555555555555555555555
 
 section BLOCKS
 
@@ -4201,27 +4388,6 @@ section FLOW
 
 
 
-section FOUR
-555555555555555555555555555555
-5..........5555555..........55
-5.........73vvvvv19.........55
-5.........5>*****<5.........55
-5.........19>***<73.........55
-5..........155*553..........55
-5............5.5............55
-5....459.............756....55
-5...8>*19...........73*<8...55
-5...5>e*155...v...553*e<5...55
-5...5>*e**...>K<...**e*<5...55
-5...5>e*755...^...559*e<5...55
-5...2>*73...........19*<2...55
-5....453.............156....55
-5............5.5............55
-5............5.5............55
-5............5*5............55
-5...........73e19...........55
-5...........5*e*5...........55
-555555555555555555555555555555
 
 section HUNTER
 555555555555555555555555555555
