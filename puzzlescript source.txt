@@ -1,4 +1,4 @@
-title Kye.ps 5.115
+title Kye.ps 5.117
 (Note always before sharing set SOUND_VOL to 0.05 in the HTML)
 ( Requires auroriax's Puzzlescript+ fork : https://auroriax.github.io/PuzzleScript/editor.html)
 
@@ -2236,7 +2236,7 @@ BlackHoleBusy = BlackHoleBusy1 or BlackHoleBusy2 or BlackHoleBusy3 or BlackHoleB
 
 Timer = Timer0 or Timer1 or Timer2 or Timer3 or Timer4 or Timer5 or Timer6 or Timer7 or Timer8 or Timer9
 
-Object = Kye or Wall or Block or RoundBlock or Earth or Arrow or UNKNOWN or Diamond or Turner or Sticky or Bouncer or BlackHole or BlackHoleBusy or Beast or BlockedDoor or Timer or AutoSomething
+Object = Kye or Wall or Block or RoundBlock or Earth or Arrow or UNKNOWN or Diamond or Turner or Sticky or Bouncer or BlackHoleBusy or Beast or BlockedDoor or Timer or AutoSomething
 
 KyePushable = Block or RoundBlock or Arrow or Turner or Sticky or Bouncer or Timer or AutoSomething
 
@@ -2287,6 +2287,7 @@ COLLISIONLAYERS
 
 Background
 Door
+BlackHole
 Object
 AltSprites
 TopLeft
@@ -2660,13 +2661,14 @@ down  [ RealTime BouncerTic ][ > BouncerD | BouncerPushable ] -> [ RealTime Boun
 
 [RealTime ArrowTic][ ForbidKyePush ]                     -> [ RealTime ArrowTic][]
 [RealTime ArrowTic][ > Arrow KyeJustPushed | no Object ] -> [ RealTime ArrowTic][ > Arrow ForbidKyePush | no Object ]
+
 [RealTime ArrowTic][ KyeJustPushed ]                     -> [ RealTime ArrowTic ][]
 
 [ ForbidKyePush ][ moving Kye ] -> [  ForbidKyePush ][ stationary Kye ]
 
 
 
-[ > Kye | KyePushable no ForbidKyePush | BlackHole  ] -> [ > Kye | > KyePushable | BlackHole ]
+
 [ > Kye | KyePushable no ForbidKyePush | no Object  ] -> [ > Kye | > KyePushable | ]
 (Sticky logic for Kye, must have priority)
 vertical [ < Kye | StickyV ] -> [ < Kye | < StickyV ]
@@ -2703,10 +2705,7 @@ up    [ up    Kye | up    KyePushable no ForbidKyePush | no Object ] -> [  | Kye
 
 
 ( Blackhole swallow)
-down  [ down  Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
-right [ right Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
-left  [ left  Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
-up    [ up    Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
+late [ Object BlackHole ] -> [ BlackHoleBusy1 ]
 
 [ RealTime BlackHoleConsumptionTicHalf ][            BlackHoleBusy5 ] -> [ RealTime BlackHoleConsumptionTic ][ BlackHole ]
 [ RealTime BlackHoleConsumptionTic ][            BlackHoleBusy4 ] -> [ RealTime BlackHoleConsumptionTic ][ BlackHoleBusy5 ]
@@ -2718,6 +2717,9 @@ up    [ up    Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
 
 
 (slide logic)
+
+(this is to allow the slide logic to consider the black holes as objects, later the walls get removed)
+[ ArrowTic ][ BlackHole ] -> [ ArrowTic ][ BlackHole Wall____]
 
 ( - down )
 [ Slide ] -> []
@@ -2803,9 +2805,13 @@ right [ up RoundArrowU SlideR1 | SlideR2 no Object ] -> [ | up RoundArrowU Slide
 left  [ up RoundArrowU SlideL1 | SlideL2 no Object ] -> [ | up RoundArrowU SlideL2 ]
 
 
+[ArrowTic][ BlackHole Wall____ ] -> [ArrowTic][ BlackHole ]
+
 
 
 ( death animation )
+( Normally BlackHole consumption is processed late, but for Kye's respawn to work it has to happen earlier)
+[ > Kye | BlackHole ] -> [ | BlackHole Wall____ ]
 [RealTime][ DeathSprite2 ] -> [RealTime][]
 [RealTime][ DeathSprite1 ] -> [RealTime][ DeathSprite2 ]
 
