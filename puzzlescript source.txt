@@ -1,4 +1,4 @@
-title Kye 2.103
+title Kye.ps 5.117
 (Note always before sharing set SOUND_VOL to 0.05 in the HTML)
 ( Requires auroriax's Puzzlescript+ fork : https://auroriax.github.io/PuzzleScript/editor.html)
 
@@ -21,7 +21,7 @@ text_color       #000000
 
 realtime_interval 0.1
 
-
+(throttle_movement 0.01)
 
 
 (verbose_logging)
@@ -261,7 +261,8 @@ DiamondSprite2
 ................
 
 
-
+WallEmpty
+#C0C0C0
 
 Wall____
 #C0C0C0 #ffffff #808080
@@ -2021,6 +2022,8 @@ transparent
 AutoCountdown19
 transparent
 
+
+
 ColM0
 transparent
 
@@ -2033,6 +2036,14 @@ transparent
 ColM3
 transparent
 
+KyeJustPushed
+transparent
+
+ForbidKyePush
+transparent
+
+BouncerFlip
+transparent
 
 =======
 LEGEND
@@ -2139,6 +2150,9 @@ KyeTic = TicM1
 BouncerTic = TicM5
 BeastTic = TicM5
 
+
+
+
 ColumnModule = ColM0 or ColM1 or ColM2 or ColM3
 
 RowNumber = Row00 or Row01 or Row02 or Row03 or Row04 or Row05 or Row06 or Row07 or Row08 or Row09 or Row10 or Row11 or  Row12 or Row13 or Row14 or Row15 or Row16 or Row17 or Row18
@@ -2146,7 +2160,6 @@ RowNumber = Row00 or Row01 or Row02 or Row03 or Row04 or Row05 or Row06 or Row07
 AutoCountdown = AutoCountdown00 or AutoCountdown01 or AutoCountdown02 or AutoCountdown03 or AutoCountdown04 or AutoCountdown05 or AutoCountdown06 or AutoCountdown07 or AutoCountdown08 or AutoCountdown09 or AutoCountdown10 or AutoCountdown11 or  AutoCountdown12 or AutoCountdown13 or AutoCountdown14 or AutoCountdown15 or AutoCountdown16 or AutoCountdown17 or AutoCountdown18 or AutoCountdown19
 
 
-Timer = Timer9 or Timer8 or Timer7 or Timer6 or Timer5 or Timer4 or Timer3 or Timer2 or Timer1 or Timer0
 
 MagnetQuickTic= TicM1
 
@@ -2221,7 +2234,9 @@ BeastFoolishMoveProb = DieRoll2
 
 BlackHoleBusy = BlackHoleBusy1 or BlackHoleBusy2 or BlackHoleBusy3 or BlackHoleBusy4 or BlackHoleBusy5
 
-Object = Kye or Wall or Block or RoundBlock or Earth or Arrow or UNKNOWN or Diamond or Turner or Sticky or Bouncer or BlackHole or BlackHoleBusy or Beast or BlockedDoor or Timer or AutoSomething
+Timer = Timer0 or Timer1 or Timer2 or Timer3 or Timer4 or Timer5 or Timer6 or Timer7 or Timer8 or Timer9
+
+Object = Kye or Wall or Block or RoundBlock or Earth or Arrow or UNKNOWN or Diamond or Turner or Sticky or Bouncer or BlackHoleBusy or Beast or BlockedDoor or Timer or AutoSomething
 
 KyePushable = Block or RoundBlock or Arrow or Turner or Sticky or Bouncer or Timer or AutoSomething
 
@@ -2247,7 +2262,7 @@ BlackHoleSprite = BlackHoleSprite1 or BlackHoleSprite2 or BlackHoleSprite3 or Bl
 
 DeathSprites = DeathSprite1 or DeathSprite2
 
-AltSprites = DiamondSprite or BlackHoleSprite or DeathSprites
+AltSprites = DiamondSprite or BlackHoleSprite or DeathSprites or  WallEmpty
 
 To = ToU or ToD or ToL or ToR
 Slide = SlideR1 or SlideL1 or SlideU1 or SlideD1 or SlideR2 or SlideL2 or SlideU2 or SlideD2
@@ -2272,6 +2287,7 @@ COLLISIONLAYERS
 
 Background
 Door
+BlackHole
 Object
 AltSprites
 TopLeft
@@ -2300,10 +2316,14 @@ KyeLastSeenHere
 KyeColumn
 KyeRow
 DieRoll
-Placeholder
+PlaceHolder1
+PlaceHolder2
+PlaceHolder3
 RespawnSearch
 FirstTic
-
+KyeJustPushed
+ForbidKyePush
+BouncerFlip
 
 ======
 RULES
@@ -2329,6 +2349,7 @@ up    [ Background | ] -> [ action Background | ]
 left  [ Background | ] -> [ action Background | ]
 
 [ stationary Background ] -> [ Background TopLeft ]
+[ action Background ] -> [ stationary Background ]
 
 [ RealTime ] -> []
 [ TopLeft ][ stationary Kye ] -> [ TopLeft RealTime ][ Kye ]
@@ -2608,24 +2629,47 @@ down  [ down  ArrowD | TurnerAntiClockwise ] -> [ ArrowD ToR | TurnerAntiClockwi
 
 
 ( Bouncer collision)
-right [ > BouncerR | < BouncerL ] -> [ BouncerL | BouncerR ]
+(right [ > BouncerR | < BouncerL ] -> [ BouncerL | BouncerR ]
 left  [ > BouncerL | < BouncerR ] -> [ BouncerR | BouncerL ]
 up    [ > BouncerU | < BouncerD ] -> [ BouncerD | BouncerU ]
-down  [ > BouncerD | < BouncerU ] -> [ BouncerD | BouncerU ]
+down  [ > BouncerD | < BouncerU ] -> [ BouncerD | BouncerU ])
+
+
+(Bouncer Bounce)
+
+[ BouncerFlip ] -> []
+
+right [ RealTime BouncerTic ][ right BouncerR | Object ]          -> [ RealTime BouncerTic ][ right BouncerR BouncerFlip | Object ]
+left  [ RealTime BouncerTic ][ left  BouncerL | Object ]          -> [ RealTime BouncerTic ][ left BouncerL BouncerFlip | Object ]
+up    [ RealTime BouncerTic ][ up    BouncerU | Object ]          -> [ RealTime BouncerTic ][ up BouncerU BouncerFlip | Object ]
+down  [ RealTime BouncerTic ][ down  BouncerD | Object ]          -> [ RealTime BouncerTic ][ down BouncerD BouncerFlip | Object ]
 
 
 (Bouncer Push)
-right [ > BouncerR | BouncerPushable ] -> [ BouncerL | > BouncerPushable ]
-left  [ > BouncerL | BouncerPushable ] -> [ BouncerR | > BouncerPushable ]
-up    [ > BouncerU | BouncerPushable ] -> [ BouncerD | > BouncerPushable ]
-down  [ > BouncerD | BouncerPushable ] -> [ BouncerU | > BouncerPushable ]
+right [ RealTime BouncerTic ][ > BouncerR | BouncerPushable ] -> [ RealTime BouncerTic ][ BouncerR | > BouncerPushable ]
+left  [ RealTime BouncerTic ][ > BouncerL | BouncerPushable ] -> [ RealTime BouncerTic ][ BouncerL | > BouncerPushable ]
+up    [ RealTime BouncerTic ][ > BouncerU | BouncerPushable ] -> [ RealTime BouncerTic ][ BouncerU | > BouncerPushable ]
+down  [ RealTime BouncerTic ][ > BouncerD | BouncerPushable ] -> [ RealTime BouncerTic ][ BouncerD | > BouncerPushable ]
+
+[ BouncerFlip BouncerR ] -> [ BouncerL ]
+[ BouncerFlip BouncerL ] -> [ BouncerR ]
+[ BouncerFlip BouncerU ] -> [ BouncerD ]
+[ BouncerFlip BouncerD ] -> [ BouncerU ]
 
 
 (Kye can push)
 
+[RealTime ArrowTic][ ForbidKyePush ]                     -> [ RealTime ArrowTic][]
+[RealTime ArrowTic][ > Arrow KyeJustPushed | no Object ] -> [ RealTime ArrowTic][ > Arrow ForbidKyePush | no Object ]
 
-[ > Kye | KyePushable | BlackHole  ] -> [ > Kye | > KyePushable | BlackHole ]
-[ > Kye | KyePushable | no Object  ] -> [ > Kye | > KyePushable | ]
+[RealTime ArrowTic][ KyeJustPushed ]                     -> [ RealTime ArrowTic ][]
+
+[ ForbidKyePush ][ moving Kye ] -> [  ForbidKyePush ][ stationary Kye ]
+
+
+
+
+[ > Kye | KyePushable no ForbidKyePush | no Object  ] -> [ > Kye | > KyePushable | ]
 (Sticky logic for Kye, must have priority)
 vertical [ < Kye | StickyV ] -> [ < Kye | < StickyV ]
 horizontal [ < Kye | StickyH ] -> [ < Kye | < StickyH ]
@@ -2636,15 +2680,17 @@ horizontal [ < Kye | StickyH ] -> [ < Kye | < StickyH ]
 ( Priority to Kye's movement )
 
 ( : Enter door )
+
 right [ > Kye | DoorLR  BlockedDoor ] -> [ | DoorLR Kye ]
 left  [ > Kye | DoorRL  BlockedDoor ] -> [ | DoorRL Kye ]
 up    [ > Kye | DoorDU  BlockedDoor ] -> [ | DoorDU Kye ]
 down  [ > Kye | DoorUD  BlockedDoor ] -> [ | DoorUD Kye ]
 
 
-
-
-[ > Kye | > KyePushable | no Object ] -> [  | Kye | KyePushable  ]
+down  [ down  Kye | down  KyePushable no ForbidKyePush | no Object ] -> [  | Kye | KyePushable KyeJustPushed  ]
+right [ right Kye | right KyePushable no ForbidKyePush | no Object ] -> [  | Kye | KyePushable KyeJustPushed  ]
+left  [ left  Kye | left  KyePushable no ForbidKyePush | no Object ] -> [  | Kye | KyePushable KyeJustPushed  ]
+up    [ up    Kye | up    KyePushable no ForbidKyePush | no Object ] -> [  | Kye | KyePushable KyeJustPushed  ]
 
 
 
@@ -2659,10 +2705,7 @@ down  [ > Kye | DoorUD  BlockedDoor ] -> [ | DoorUD Kye ]
 
 
 ( Blackhole swallow)
-down  [ down  Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
-right [ right Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
-left  [ left  Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
-up    [ up    Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
+late [ Object BlackHole ] -> [ BlackHoleBusy1 ]
 
 [ RealTime BlackHoleConsumptionTicHalf ][            BlackHoleBusy5 ] -> [ RealTime BlackHoleConsumptionTic ][ BlackHole ]
 [ RealTime BlackHoleConsumptionTic ][            BlackHoleBusy4 ] -> [ RealTime BlackHoleConsumptionTic ][ BlackHoleBusy5 ]
@@ -2671,15 +2714,12 @@ up    [ up    Object | BlackHole ] -> [ | action BlackHoleBusy1 ]
 [ RealTime BlackHoleConsumptionTic ][ stationary BlackHoleBusy1 ] -> [ RealTime BlackHoleConsumptionTic ][ BlackHoleBusy2 ]
 
 
-(Bouncer Bounce)
-
-right [ > BouncerR | Object ]          -> [ BouncerL | Object ]
-left  [ > BouncerL | Object ]          -> [ BouncerR | Object ]
-up    [ > BouncerU | Object ]          -> [ BouncerD | Object ]
-down  [ > BouncerD | Object ]          -> [ BouncerU | Object ]
 
 
 (slide logic)
+
+(this is to allow the slide logic to consider the black holes as objects, later the walls get removed)
+[ ArrowTic ][ BlackHole ] -> [ ArrowTic ][ BlackHole Wall____]
 
 ( - down )
 [ Slide ] -> []
@@ -2765,9 +2805,13 @@ right [ up RoundArrowU SlideR1 | SlideR2 no Object ] -> [ | up RoundArrowU Slide
 left  [ up RoundArrowU SlideL1 | SlideL2 no Object ] -> [ | up RoundArrowU SlideL2 ]
 
 
+[ArrowTic][ BlackHole Wall____ ] -> [ArrowTic][ BlackHole ]
+
 
 
 ( death animation )
+( Normally BlackHole consumption is processed late, but for Kye's respawn to work it has to happen earlier)
+[ > Kye | BlackHole ] -> [ | BlackHole Wall____ ]
 [RealTime][ DeathSprite2 ] -> [RealTime][]
 [RealTime][ DeathSprite1 ] -> [RealTime][ DeathSprite2 ]
 
@@ -2815,7 +2859,7 @@ endloop
 [ RealTime TicM5 TicM2 TicM3 no FirstTic ][ Timer9 ] -> [ RealTime TicM5 TicM2 TicM3 ][ Timer8 ]
 
 
-( Block any movement towards door that's not the vlaid one already processeced above)
+( Block any movement towards door that's not the valid one already processeced above)
 [ > Object | Door ] -> [ Object | Door ]
 
 
@@ -2826,79 +2870,13 @@ a lot of levels that implicitly require this sort of priority to be enforced. e.
 ( the priority SEEMS to be as follows: arrows before other objects, down has priority over right, right has priority over left and up is the worst )
 
 
-startloop
-    down [ down  Arrow | no Object ] -> [ | Arrow ]
-    right[ right Arrow | no Object ] -> [ | Arrow ]
-endloop
 
 
-startloop
-    down [ down  Arrow | no Object ] -> [ | Arrow ]
-    right[ right Arrow | no Object ] -> [ | Arrow ]
-    left [ left  Arrow | no Object ] -> [ | Arrow ]
-endloop
-
-startloop
-    down [ down  Arrow | no Object ] -> [ | Arrow ]
-    right[ right Arrow | no Object ] -> [ | Arrow ]
-    left [ left  Arrow | no Object ] -> [ | Arrow ]
-    up   [ up    Arrow | no Object ] -> [ | Arrow ]
-
-endloop
-
-
-startloop
-    down [ down  Arrow | no Object ] -> [ | Arrow ]
-    right[ right Arrow | no Object ] -> [ | Arrow ]
-    left [ left  Arrow | no Object ] -> [ | Arrow ]
-    up   [ up    Arrow | no Object ] -> [ | Arrow ]
-
-    down [ down  Object | no Object ] -> [ | Object ]
-endloop
-
-startloop
-    down [ down  Arrow | no Object ] -> [ | Arrow ]
-    right[ right Arrow | no Object ] -> [ | Arrow ]
-    left [ left  Arrow | no Object ] -> [ | Arrow ]
-    up   [ up    Arrow | no Object ] -> [ | Arrow ]
-
-    down [ down  Object | no Object ] -> [ | Object ]
-    right[ right Object | no Object ] -> [ | Object ]
-endloop
-
-
-startloop
-    down [ down  Arrow | no Object ] -> [ | Arrow ]
-    right[ right Arrow | no Object ] -> [ | Arrow ]
-    left [ left  Arrow | no Object ] -> [ | Arrow ]
-    up   [ up    Arrow | no Object ] -> [ | Arrow ]
-
-    down [ down  Object | no Object ] -> [ | Object ]
-    right[ right Object | no Object ] -> [ | Object ]
-    left [ left  Object | no Object ] -> [ | Object ]
-endloop
+(someone good with programming please help me, my family is dying )
 
 
 
-startloop
-    down [ down  Arrow | no Object ] -> [ | Arrow ]
-    right[ right Arrow | no Object ] -> [ | Arrow ]
-    left [ left  Arrow | no Object ] -> [ | Arrow ]
-    up   [ up    Arrow | no Object ] -> [ | Arrow ]
-
-    down [ down  Object | no Object ] -> [ | Object ]
-    right[ right Object | no Object ] -> [ | Object ]
-    left [ left  Object | no Object ] -> [ | Object ]
-    up   [ up    Object | no Object ] -> [ | Object ]
-endloop
-
-
-
-(some good with programming please help me, my family is dying )
-
-
-
-(down [ down  Arrow | no Object ] -> [ | Arrow ]
+down [ down  Arrow | no Object ] -> [ | Arrow ]
 startloop
 
    down [ down  Arrow | no Object ] -> [ | Arrow ]
@@ -2940,7 +2918,7 @@ startloop
    right[ right Object | no Object ] -> [ | Object ]
    left [ left  Object | no Object ] -> [ | Object ]
    up   [ up    Object | no Object ] -> [ | Object ]
-endloop)
+endloop
 
 
 
@@ -2970,6 +2948,23 @@ late [ AutoSomething Row18 no AutoCountdown ] -> [ AutoSomething Row18 AutoCount
 
 late [ KyeLastSeenHere ] -> []
 late [ Kye ] -> [ Kye KyeLastSeenHere ]
+
+
+( Wall holes )
+[ FirstTic ][ Wall ] -> [ FirstTic ][ action Wall ]
+up [ FirstTic ][ action Wall | no Wall ] -> [ FirstTic ][ Wall |   ]
+down [ FirstTic ][ action Wall | no  Wall ] -> [ FirstTic ][ Wall |   ]
+right [ FirstTic ][ action Wall | no Wall ] -> [ FirstTic ][ Wall |   ]
+left [ FirstTic ][ action Wall | no Wall ] -> [ FirstTic ][ Wall |  ]
+[ FirstTic ][ action Wall ] -> [ FirstTic ][ stationary Wall WallEmpty  ]
+
+
+vertical [ FirstTic ][ WallEmpty | Wall no WallEmpty ] -> [ FirstTic ][ action WallEmpty | action Wall ]
+[ FirstTic ][ action Wall no WallEmpty ] -> [ FirstTic ][ stationary Wall ]
+
+horizontal [ FirstTic ][ action WallEmpty | stationary Wall no WallEmpty ] -> [ FirstTic ][ action Wall____ | Wall ]
+
+
 
 (Animations)
 late [ RealTime DiamondTic ][ DiamondSprite ] -> [ RealTime DiamondTic] [ ]
@@ -3046,7 +3041,6 @@ WINCONDITIONS
 =======
 LEVELS
 =======
-
 
 
 section FIRST
@@ -3220,16 +3214,16 @@ Message SECOND - Not the second level anymore
 5>>>>>e...5.........5........5
 5555559...59.......75........5
 5.....5...559.....7555.79....5
-5.....5...5.59...75.55..5....5
-5.....1...5..56e45..55..5....5
-5*.....1..5.53^^^15.55..5....5
+5.....5...5559...75555..5....5
+5.....1...55556e455555..5....5
+5*.....1..5553^^^15555..5....5
 5e5559..1.553^^^^^1555..5....5
 5*vvv.9..153^^^^^^^155..5....5
 5vvvvv59..1..........5..5....5
 5vvvv7559..1........*5s.5....5
 5vvv755559..1555555555555....5
-5vv45...559...3<<<<<<..*5....5
-5eee15...559.b<<<<<<<...5....5
+5vv45555559...3<<<<<<..*5....5
+5eee15555559.b<<<<<<<...5....5
 5....15eee559e9<<<<<<..*5...75
 5.....e^^e.....5555555555vv755
 5.....e^^e..............5v45e5
@@ -3246,21 +3240,21 @@ Message SLIDE - Why are blocks round now?
 ( This is basically a xye level I made trying to make it as 'classic' as possible, avoiding Xye stuff and focusing on blocks and arrows. )
 
 555555555555555555555555555555
-5........53*e*e155555........5
-5........5cvvvv<<<<55........5
-5........5cvvvv<<<<55........5
-5........5cvvvv<<<<55........5
-5........5cvvvv755555........5
-5........59vvv7555555........5
-5.......7556e45555555........5
-5......455..........5........5
-5.....5vv5.b.B...B..5........5
-5....5vvv5.......B..5........5
-5...5v**v5.......B..5........5
-5..8v*e*v5.......B..5........5
-5.75v***v5.......B..5........5
-5555vvvvv5....K.....5........5
-555559e4559.........5....75555
+55555555553*e*e155555555555555
+5555555555cvvvv<<<<55555555555
+5555555555cvvvv<<<<55555555555
+5555555555cvvvv<<<<55555555555
+5555555555cvvvv755555555555555
+55555555559vvv7555555555555555
+555555555556e45555555555555555
+5555555555..........5555555555
+5555555vv5.b.B...B..5555555555
+555555vvv5.......B..5555555555
+55555v**v5.......B..5555555555
+5558v*e*v5.......B..5555555555
+5555v***v5.......B..5555555555
+5555vvvvv5....K.....5555555555
+555559e4559.........5555555555
 555555>>>>2....79...155553eee5
 555555>>>>e....55...ellelle*e5
 555555>>>>8....55...755559eee5
@@ -3326,6 +3320,38 @@ Still I firmly believe that the monsters are a foundational element for Kye's be
 555555555555555555555555555555
 
 
+section GOALIE
+
+message GOALIE - Blocks with an expiration date
+
+( be vexorian, for this game )
+( I've seen this idea some multiple times. There's even a variation in Xye. I am reusing this idea but this time as a way to teach the mechanics of Timers. I probably mentioned it elsewhere, but I dislike timers. I do like this idea of joining forces with two arrows in order to block other arrows.
+
+A problem with this sort of level is that the Kye engine and (Kye.ps due to imitating it) allows to hit arrows mid-air, so it is quite possible for a Player to solve this kind of level in a non-thinky way and ever realize about the cool idea. I am trying to deal with this with the placement of the [8] timers, they aren't placed the same way as the rest, so if you try to hit one of them mid-air you will miss the other one. The only problem with this approach is that now the solution needs you to have really good dexterity in this one place.)
+
+
+555555555555555555555555555555
+555555555v55555555555v55555555
+55555v555{555v555v555x555v5555
+55555}555v555|555y555v555w5555
+55555v555{555v555v555z555v5555
+55555}555.555|H5Hy555.555x5555
+555.........................55
+555............v............55
+555............*............55
+555.........................55
+555.........................55
+555.........................55
+555.......>*...K...*<.......55
+555.........................55
+555.........................55
+555.........................55
+555............*............55
+555.7.9.7.9.7.9^7.9.7.9.7.9.55
+555.5w5.5w5.5w5.5w5.5w5.5w5.55
+555H5*5H5*5H5*5H5*5H5*5H5*5H55
+555555555555555555555555555555
+
 
 
 
@@ -3372,24 +3398,24 @@ message FOUR - There are four directions, in this order: down , right, left, up.
 (In a way, it makes sense? If it was gravity, down would be easier than the other directios? )
 
 555555555555555555555555555555
-5..........5555555..........55
-5.........73vvvvv19.........55
-5.........5>*****<5.........55
-5.........19>***<73.........55
-5..........155*553..........55
-5............5.5............55
-5....459.............756....55
-5...8>*19...........73*<8...55
-5...5>e*155...v...553*e<5...55
-5...5>*e**...>K<...**e*<5...55
-5...5>e*755...^...559*e<5...55
-5...2>*73...........19*<2...55
-5....453.............156....55
-5............5.5............55
-5............5.5............55
-5............5*5............55
-5...........73e19...........55
-5...........5*e*5...........55
+555555555555555555555555555555
+555555555573vvvvv1555555555555
+55555555555>*****<555555555555
+555555555559>***<7555555555555
+55555555555555*555555555555555
+5555555555...5.5...55555555555
+5555555955.........55755555555
+55555>*195.........573*<555555
+55555>e*155...v...553*e<555555
+55555>*e**...>K<...**e*<555555
+55555>e*755...^...559*e<555555
+55555>*735.........519*<555555
+5555555355.........55155555555
+5555555555...5.5...55555555555
+55555555555555.555555555555555
+55555555555555*555555555555555
+55555555555573e195555555555555
+5555555555555*e*55555555555555
 555555555555555555555555555555
 
 
@@ -3519,9 +3545,11 @@ message ZOO - Handle with care
 
 ( I realized that as far as monster levels go, this is the best one from shareware kye )
 
+(I Added  a diamond at a strategic position )
+
 555555555555555555555555555555
 5.e.........55T..b....b.5....5
-5.49eeeeeeeeee.......b..e.K..5
+5.49eee*eeeeee.......b..e.K..5
 5..19[.....el5......b...5....5
 5...15555555555555555555555555
 5....5.ree..dd....s...ee..5E.5
@@ -3830,7 +3858,7 @@ message SLIDERS - Remember they're square
 section ROUNDERS
 message ROUNDERS - They are round
 
-
+( Colin Phipps , problem.kye . I had to make a slight modification so that the level works in this version of kye. Changed the position of the black hole in the middle. My initial goal was to fix the game instead of modifying the level. But now I am pretty much convinced it is impossible to make the original version of this level work correctly in kye.ps without adding some really heavy rules that would make the performance much worse)
 
 555555555555555555555555555555
 5*5H*vvvvv5***5.2vvvvv13ee.e*5
@@ -3839,8 +3867,8 @@ message ROUNDERS - They are round
 5>>>159e45vvvvvb15555559e>>ve5
 5>>>>15..56vvv9.U.....55e^<ve5
 5>>>>>2.e2vvvv5.7559L455e^<ve5
-5>>>>>e..e<<<<cH3*.5..H5*.>>e5
-5>>>>>8.e8aaaa53...5..159evve5
+5>>>>>e..e<<<<cH3*.5..55*.>>e5
+5>>>>>8.e8aaaa53...5..H59evve5
 5>>>>75..555553.BBB5...L5e<>e5
 5>>>755..5>*.....*<5...L5ee*e5
 5555555..556....4555.***556i45
