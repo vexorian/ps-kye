@@ -1,4 +1,4 @@
-title Kye.ps 5.117
+title Kye.ps 5.119
 (Note always before sharing set SOUND_VOL to 0.05 in the HTML)
 ( Requires auroriax's Puzzlescript+ fork : https://auroriax.github.io/PuzzleScript/editor.html)
 
@@ -2719,7 +2719,7 @@ late [ Object BlackHole ] -> [ BlackHoleBusy1 ]
 (slide logic)
 
 (this is to allow the slide logic to consider the black holes as objects, later the walls get removed)
-[ ArrowTic ][ BlackHole ] -> [ ArrowTic ][ BlackHole Wall____]
+[ ArrowTic ][ BlackHole no Object ] -> [ ArrowTic ][ BlackHole Wall____]
 
 ( - down )
 [ Slide ] -> []
