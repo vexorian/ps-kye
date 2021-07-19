@@ -1,4 +1,4 @@
-title Kye.ps 6.133
+title Kye.ps 7.135
 (Note always before sharing set SOUND_VOL to 0.05 in the HTML)
 ( Requires auroriax's Puzzlescript+ fork : https://auroriax.github.io/PuzzleScript/editor.html)
 
@@ -2933,7 +2933,8 @@ up    [ up    Kye | up    KyePushable no ForbidKyePush | no Object ] -> [  | Kye
 
 
 ( Blackhole swallow)
-late [ Object BlackHole ] -> [ BlackHoleBusy1 ]
+late [ RealTime no BlackHoleConsumptionTic ][ Object BlackHole ] -> [ RealTime BlackHoleConsumptionTic ][ BlackHoleBusy1 ]
+late [ RealTime BlackHoleConsumptionTic ][ Object BlackHole ] -> [ RealTime BlackHoleConsumptionTic ][ BlackHoleBusy2 ]
 
 [ RealTime BlackHoleConsumptionTicHalf ][            BlackHoleBusy5 ] -> [ RealTime BlackHoleConsumptionTic ][ BlackHole ]
 [ RealTime BlackHoleConsumptionTic ][            BlackHoleBusy4 ] -> [ RealTime BlackHoleConsumptionTic ][ BlackHoleBusy5 ]
@@ -3654,6 +3655,35 @@ A problem with this sort of level is that the Kye engine and (Kye.ps due to imit
 555.5w5.5w5.5w5.5w5.5w5.5w5.55
 555H5*5H5*5H5*5H5*5H5*5H5*5H55
 555555555555555555555555555555
+
+
+section LOCKPICKING
+
+message LOCKPICKING - Get through it.
+
+555555555555555555555555555555
+555555555555555555555555555555
+555555555555555555555555555555
+5555555555eeeee155555555555555
+5555555555evvveee1555555555555
+5555555555eveve8ee155555555555
+5555555555e^^^e59e..5555555555
+5555555555^^^^^53.K.5555555555
+5555555555^^^^^5....5555555555
+555555555555^555....5555555555
+555555555555^lllll<75555555555
+555555555555555559^55555555555
+555555555555555553^15555555555
+55555555555555555^^^5555555555
+55555555555555555^^^5555555555
+55555555555555555^^^5555555555
+555555555555555555*55555555555
+555555555555555555555555555555
+555555555555555555555555555555
+555555555555555555555555555555
+
+
+
 
 
 
@@ -4896,3 +4926,6 @@ section COLLECTOR
 
 
 )
+
+
+
