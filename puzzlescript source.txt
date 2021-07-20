@@ -1,4 +1,4 @@
-title Kye.ps 7.135
+title Kye.ps 8.150
 (Note always before sharing set SOUND_VOL to 0.05 in the HTML)
 ( Requires auroriax's Puzzlescript+ fork : https://auroriax.github.io/PuzzleScript/editor.html)
 
@@ -1754,157 +1754,223 @@ Timer0
 ..0.0.0.0.0.0...
 ................
 
-AutoSliderR
+AutoSliderSprite
 #000000 #FFFF00 #FF0000 #0000FF
 ..000000000000..
 .00000000000000.
 0001111111111000
 0011111221111100
 0011111221111100
-0011111111311100
-0011111111331100
-0012213333333100
-0012213333333100
-0011111111331100
-0011111111311100
+0011111111111100
+0011111111111100
+0012211111122100
+0012211111122100
+0011111111111100
+0011111111111100
 0011111221111100
 0011111221111100
 0001111111111000
 .00000000000000.
 ..000000000000..
 
-AutoSliderL
+AutoSliderSpriteR
 #000000 #FFFF00 #FF0000 #0000FF
-..000000000000..
-.00000000000000.
-0001111111111000
-0011111221111100
-0011111221111100
-0011131111111100
-0011331111111100
-0013333333122100
-0013333333122100
-0011331111111100
-0011131111111100
-0011111221111100
-0011111221111100
-0001111111111000
-.00000000000000.
-..000000000000..
+................
+................
+................
+................
+................
+..........3.....
+..........33....
+......3333333...
+......3333333...
+..........33....
+..........3.....
+................
+................
+................
+................
+................
+
+AutoSliderSpriteL
+#000000 #FFFF00 #FF0000 #0000FF
+................
+................
+................
+................
+................
+.....3..........
+....33..........
+...3333333......
+...3333333......
+....33..........
+.....3..........
+................
+................
+................
+................
+................
+
+AutoSliderSpriteU
+#000000 #FFFF00 #FF0000 #0000FF
+................
+................
+................
+.......33.......
+......3333......
+.....333333.....
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+................
+................
+................
+................
+................
+................
+
+AutoSliderSpriteD
+#000000 #FFFF00 #FF0000 #0000FF
+................
+................
+................
+................
+................
+................
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.....333333.....
+......3333......
+.......33.......
+................
+................
+................
 
 AutoSliderU
-#000000 #FFFF00 #FF0000 #0000FF
-..000000000000..
-.00000000000000.
-0001111111111000
-0011111331111100
-0011113333111100
-0011133333311100
-0011111331111100
-0012211331122100
-0012211331122100
-0011111331111100
-0011111111111100
-0011111221111100
-0011111221111100
-0001111111111000
-.00000000000000.
-..000000000000..
+transparent
 
 AutoSliderD
-#000000 #FFFF00 #FF0000 #0000FF
-..000000000000..
-.00000000000000.
-0001111111111000
-0011111221111100
-0011111221111100
+transparent
+
+AutoSliderR
+transparent
+
+AutoSliderL
+transparent
+
+
+AutoRockySprite
+#000000 #FFFF00 #0000FF #FF0000
+....00000000....
+...0000000000...
+..000111111000..
+.00011122111000.
+0001111221111000
 0011111111111100
-0011111331111100
-0012211331122100
-0012211331122100
-0011111331111100
-0011133333311100
-0011113333111100
-0011111331111100
-0001111111111000
-.00000000000000.
-..000000000000..
+0011111111111100
+0012211111122100
+0012211111122100
+0011111111111100
+0011111111111100
+0001111221111000
+.00011122111000.
+..000111111000..
+...0000000000...
+....00000000....
+
+
+AutoRockySpriteR
+#000000 #FFFF00 #0000FF #FF0000
+................
+................
+................
+................
+................
+..........3.....
+..........33....
+......3333333...
+......3333333...
+..........33....
+..........3.....
+................
+................
+................
+................
+................
+
+AutoRockySpriteL
+#000000 #FFFF00 #0000FF #FF0000
+................
+................
+................
+................
+................
+.....3..........
+....33..........
+...3333333......
+...3333333......
+....33..........
+.....3..........
+................
+................
+................
+................
+................
+
+AutoRockySpriteU
+#000000 #FFFF00 #0000FF #FF0000
+................
+................
+................
+.......33.......
+......3333......
+.....333333.....
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+................
+................
+................
+................
+................
+................
+
+AutoRockySpriteD
+#000000 #FFFF00 #0000FF #FF0000
+................
+................
+................
+................
+................
+................
+.......33.......
+.......33.......
+.......33.......
+.......33.......
+.....333333.....
+......3333......
+.......33.......
+................
+................
+................
+
+
 
 AutoRockyR
-#000000 #FFFF00 #0000FF #FF0000
-....00000000....
-...0000000000...
-..000111111000..
-.00011122111000.
-0001111221111000
-0011111111311100
-0011111111331100
-0012213333333100
-0012213333333100
-0011111111331100
-0011111111311100
-0001111221111000
-.00011122111000.
-..000111111000..
-...0000000000...
-....00000000....
+transparent
 
 AutoRockyL
-#000000 #FFFF00 #0000FF #FF0000
-....00000000....
-...0000000000...
-..000111111000..
-.00011122111000.
-0001111221111000
-0011131111111100
-0011331111111100
-0013333333122100
-0013333333122100
-0011331111111100
-0011131111111100
-0001111221111000
-.00011122111000.
-..000111111000..
-...0000000000...
-....00000000....
+transparent
 
 AutoRockyU
-#000000 #FFFF00 #0000FC #FF0000
-....00000000....
-...0000000000...
-..000111111000..
-.00011133111000.
-0001113333111000
-0011133333311100
-0011111331111100
-0012211331122100
-0012211331122100
-0011111331111100
-0011111111111100
-0001111221111000
-.00011122111000.
-..000111111000..
-...0000000000...
-....00000000....
+transparent
 
 AutoRockyD
-#000000 #FFFF00 #0000FC #FF0000
-....00000000....
-...0000000000...
-..000111111000..
-.00011122111000.
-0001111221111000
-0011111111111100
-0011111331111100
-0012211331122100
-0012211331122100
-0011111331111100
-0011133333311100
-0001113333111000
-.00011133111000.
-..000111111000..
-...0000000000...
-....00000000....
+transparent
 
 
 
@@ -2292,8 +2358,8 @@ h = Background and DoorUD
 i = Background and DoorDU
 
 
-A = Background and AutoSliderR
-F = Background and AutoRockyR
+A = Background and AutoSliderSprite
+F = Background and AutoRockySprite
 
 } = Background and Timer3
 | = Background and Timer4
@@ -2386,7 +2452,7 @@ Bouncer = BouncerR or BouncerL or BouncerU or BouncerD
 
 AutoSlider = AutoSliderU or AutoSliderD or AutoSliderL or AutoSliderR
 AutoRocky  = AutoRockyU  or AutoRockyD  or AutoRockyL  or AutoRockyR
-AutoSomething = AutoSlider or AutoRocky
+AutoSomething = AutoSlider or AutoRocky or AutoSliderSprite or AutoRockySprite
 
 Arrow = SquareArrow or RoundArrow
 
@@ -2451,11 +2517,14 @@ DiamondSprite = DiamondSprite1 or DiamondSprite2
 
 BlackHoleSprite = BlackHoleSprite1 or BlackHoleSprite2 or BlackHoleSprite3 or BlackHoleSprite4
 
+AutoSliderArmSprite = AutoSliderSpriteU or AutoSliderSpriteD or AutoSliderSpriteL or AutoSliderSpriteR
+
+AutoRockyArmSprite = AutoRockySpriteU or AutoRockySpriteD or AutoRockySpriteL or AutoRockySpriteR
 
 
 DeathSprites = DeathSprite1 or DeathSprite2
 
-AltSprites = DiamondSprite or BlackHoleSprite or DeathSprites or  WallEmpty or GnasherSprite or VirusSprite or BlobSprite or TwisterSprite or SpikeSprite
+AltSprites = DiamondSprite or BlackHoleSprite or DeathSprites or  WallEmpty or GnasherSprite or VirusSprite or BlobSprite or TwisterSprite or SpikeSprite or AutoSliderArmSprite or AutoRockyArmSprite
 To = ToU or ToD or ToL or ToR
 Slide = SlideR1 or SlideL1 or SlideU1 or SlideD1 or SlideR2 or SlideL2 or SlideU2 or SlideD2
 SlideH = SlideR1 or SlideL1
@@ -2528,6 +2597,19 @@ RULES
 ( preconditions )
 ( A late rule at the end will put these two objects together, even though many rules expect them to not be the same. This undoes the effect of that rule)
 [ BlackHole  BlackHoleBusy ] -> [ BlackHoleBusy ]
+
+( Same with auto sliders, the idea here is that the editor uses AutoSliderSprite, no matter the direction, but for the game logic it is easier to treat it as a single object )
+[ AutoSliderSprite AutoSliderSpriteR ] -> [ AutoSliderR]
+[ AutoSliderSprite AutoSliderSpriteL ] -> [ AutoSliderL]
+[ AutoSliderSprite AutoSliderSpriteD ] -> [ AutoSliderD]
+[ AutoSliderSprite AutoSliderSpriteU ] -> [ AutoSliderU]
+[ AutoSliderSprite                   ] -> [ AutoSliderU]
+
+[ AutoRockySprite AutoRockySpriteR ] -> [ AutoRockyR]
+[ AutoRockySprite AutoRockySpriteL ] -> [ AutoRockyL]
+[ AutoRockySprite AutoRockySpriteD ] -> [ AutoRockyD]
+[ AutoRockySprite AutoRockySpriteU ] -> [ AutoRockyU]
+[ AutoRockySprite                   ] -> [ AutoRockyU]
 
 
 
@@ -3204,7 +3286,7 @@ down  [FirstTic][ Wall_3__ | Wall ] -> [FirstTic][ Wall____ | Wall ]
 down  [FirstTic][ Wall_3_9 | Wall ] -> [FirstTic][ Wall___9 | Wall ]
 right [FirstTic][ Wall13__ | Wall ] -> [FirstTic][ Wall1___ | Wall ]
 right [FirstTic][ Wall_3__ | Wall ] -> [FirstTic][ Wall____ | Wall ]
-right [FirstTic][ Wall___9 | Wall ] -> [FirstTic][ Wall___9 | Wall ]
+right [FirstTic][ Wall_3_9 | Wall ] -> [FirstTic][ Wall___9 | Wall ]
 
 up    [FirstTic][ Wall1_7_ | Wall ] -> [FirstTic][ Wall1___ | Wall ]
 up    [FirstTic][ Wall__7_ | Wall ] -> [FirstTic][ Wall____ | Wall ]
@@ -3327,6 +3409,16 @@ late [ RealTime TicM5 TicM2  ][ DoorDU ] -> [ RealTime TicM5 TicM2  ][ DoorDU Do
 (post conditions)
 ( the idea of this rule is that this way there will always be a black hole whenever there is a busy black hole, this prevents the editor from removing the black hole when you save the level)
 late [ BlackHoleBusy ] -> [ BlackHoleBusy BlackHole ]
+
+late [AutoSliderU] -> [AutoSliderSprite AutoSliderSpriteU]
+late [AutoSliderD] -> [AutoSliderSprite AutoSliderSpriteD]
+late [AutoSliderR] -> [AutoSliderSprite AutoSliderSpriteR]
+late [AutoSliderL] -> [AutoSliderSprite AutoSliderSpriteL]
+
+late [AutoRockyU] -> [AutoRockySprite AutoRockySpriteU]
+late [AutoRockyD] -> [AutoRockySprite AutoRockySpriteD]
+late [AutoRockyR] -> [AutoRockySprite AutoRockySpriteR]
+late [AutoRockyL] -> [AutoRockySprite AutoRockySpriteL]
 
 
 
@@ -3499,6 +3591,33 @@ Message VAULTS - Magnets, how do they work?
 555555555555555555555555555555
 
 
+section DONTSLIDE
+message DONTSLIDE - dont let victory slide.
+
+(One of my favorite levels from Xye, which I eventually ported for vexkye.kye and I am now including here. Very small and simple. But serves as a prequel for DONTSLIDE again, which I like very much... )
+
+555555555555555555555555555555
+5............................5
+5............................5
+5............................5
+5...........bbbbb............5
+555559.................7555555
+5555559...............75555555
+55555559......K......755555555
+555555559...........7555555555
+5555555559.........75555555555
+55555555559.......755555555555
+555555555559.....7555555555555
+5555555555559.s.75555555555555
+55555555555559v755555555555555
+55555555555555v555555555555555
+55555555555555v555555555555555
+55555555555555v555555555555555
+55555555555553v155555555555555
+555555555555*e*e*5555555555555
+555555555555555555555555555555
+
+
 
 section SECOND
 Message SECOND - Not the second level anymore
@@ -3659,6 +3778,8 @@ A problem with this sort of level is that the Kye engine and (Kye.ps due to imit
 
 section LOCKPICKING
 
+(by me, for this game)
+
 message LOCKPICKING - Get through it.
 
 555555555555555555555555555555
@@ -3754,31 +3875,6 @@ message FOUR - There are four directions, in this order: down , right, left, up.
 
 
 
-section DONTSLIDE
-message DONTSLIDE - dont let victory slide.
-
-(One of my favorite levels from Xye, which I eventually ported for vexkye.kye and I am now including here. Very small and simple. But serves as a prequel for DONTSLIDE again, which I like very much... )
-
-555555555555555555555555555555
-5............................5
-5............................5
-5............................5
-5...........bbbbb............5
-555559.................7555555
-5555559...............75555555
-55555559......K......755555555
-555555559...........7555555555
-5555555559.........75555555555
-55555555559.......755555555555
-555555555559.....7555555555555
-5555555555559.s.75555555555555
-55555555555559v755555555555555
-55555555555555v555555555555555
-55555555555555v555555555555555
-55555555555555v555555555555555
-55555555555553v155555555555555
-555555555555*e*e*5555555555555
-555555555555555555555555555555
 
 
 
@@ -3912,25 +4008,26 @@ message QUEUE - Black holes consume everything, but not that quickly...
 (Made it in a rush for this game, I am not sure about it's placement. There really aren't many good Black Hole introductory levels out there )
 
 555555555555555555555555555555
-5.ee.555FFFF5555...55555555555
-5.5u.5.........5.B....55555555
+5.e..555FFFF5555...55555555555
+5eA5.5.........5.B....55555555
 5.55.............B.55.55555555
 5.55...7.......7.B.5e.55555e*5
 5.S[..759.....75.B.5e55rrre*e5
-5.55.7555v.v.755...5eA5553.555
+5.55.7555....755...5eA5553.555
 5..5.H555HHHH5555555e5553..555
 5....be..............55a...555
-5..55u555....555555H555....455
+5..55u555....555555H555....555
 5K.Heullllllll5555555...5..555
-5..5CCC55eeee5555555..5.5..555
-5..5...55............55.5..555
+5..5.C.55eeee5555555..5.5..555
+5..5CC.55............55.5..555
 5.45...5555555555555555.5..555
 5..5rrrda55555555555555.5..555
 56.5...e55555555s555555.55eee5
 5..5HHH.55555555E555555.55u5.5
 5.......................c5u5*5
-55c555H5H55555555555555555u5*5
+55cHHHH5HHHH55555555555555u5*5
 555555555555555555555555555555
+
 
 
 section ALL
@@ -4340,6 +4437,34 @@ message BLOCKADE - Build one?
 55..e.....e**59.......*<<<<<<5
 555555555555555555555555555555
 
+
+
+section MASTERPIECE
+
+message MASTERPIECE - Build your own.
+
+(By me, for this game)
+
+555555555555555555555555555555
+555555555555555555555555555555
+555555555555555555555555555555
+55555rrrr5555555s5*e5555555555
+55*e........555.T5e*5555555555
+55e*5....58......5i55555555555
+55555ssss555555...ell<l<l<<555
+55555555555......5g.5555555555
+55555555555..5....5......55555
+555555555555.555.53.eeee.55555
+555555555555...5.5..eLBe.55555
+55555ssss555...5.5..scLe.55555
+55*e5....55c5.......eeee.55555
+55e*e.......5............55555
+55555rrrr5..555.9.5i5555555555
+5555555555a.....5H5e.KlT.55555
+555555555555555a555u..5..55555
+555555555555555555555555555555
+555555555555555555555555555555
+555555555555555555555555555555
 
 
 
